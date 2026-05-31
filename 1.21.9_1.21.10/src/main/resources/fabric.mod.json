@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "tenthslot",
+	"version": "${version}",
+	"name": "Tenth Slot",
+	"description": "Adds a permanent, always-empty tenth hotbar slot as a dedicated bare-hand toggle.",
+	"authors": [
+		"Armaninyow"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/mod/tenthslot",
+		"sources": "https://github.com/armaninyow/Tenth-Slot",
+		"issues": "https://github.com/armaninyow/Tenth-Slot/discussions/categories/issues"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/tenthslot/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.armaninyow.tenthslot.TenthSlot"
+		],
+		"client": [
+			"com.armaninyow.tenthslot.TenthSlotClient"
+		],
+		"modmenu": [
+			"com.armaninyow.tenthslot.TenthSlotModMenu"
+		]
+	},
+	"mixins": [
+		"tenthslot.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.2",
+		"minecraft": ">=1.21.9 <1.21.11",
+		"java": ">=21",
+		"fabric-api": "*",
+		"cloth-config": "*",
+		"modmenu": "*"
+	}
+}

@@ -1,0 +1,31 @@
+{
+	"required": true,
+	"package": "com.armaninyow.tenthslot.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"GetItemInHandMixin",
+		"InventoryAccessor",
+		"InventoryMixin",
+		"PlayerItemSlotMixin",
+		"PlayerMixin",
+		"ServerPlayerMixin",
+		"SetCarriedItemMixin"
+	],
+	"client": [
+		"ClientPlayerEntityMixin",
+		"ClientboundSetCarriedItemMixin",
+		"GameModeMixin",
+		"HotbarMixin",
+		"InGameHudMixin",
+		"KeyBindsListMixin",
+		"KeyEntryAccessor",
+		"LeftClickMixin",
+		"ScrollMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
