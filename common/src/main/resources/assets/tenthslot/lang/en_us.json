@@ -1,12 +1,13 @@
 {
 	"key.tenthslot.tenth_slot": "Hotbar Slot 10 (Tenth Slot)",
-	"text.autoconfig.tenthslot.title": "Tenth Slot",
-	"text.autoconfig.tenthslot.option.showOnlyWhenHotbarFull": "Show Only When Hotbar Is Full",
-	"text.autoconfig.tenthslot.option.showOnlyWhenHotbarFull.@Tooltip": "When enabled, the tenth slot is only shown when all 9 hotbar slots are occupied.",
-	"text.autoconfig.tenthslot.option.vanillaOffhandActions": "Vanilla Offhand Actions",
-	"text.autoconfig.tenthslot.option.vanillaOffhandActions.@Tooltip": "When disabled, offhand item actions are blocked while the tenth slot is selected (using items, placing blocks, eating, drinking, etc.).",
-	"text.autoconfig.tenthslot.option.vanillaNonItemRightClick": "Vanilla Non-Item Right Click",
-	"text.autoconfig.tenthslot.option.vanillaNonItemRightClick.@Tooltip": "When disabled, non-item right-click interactions are blocked while the tenth slot is selected (opening doors, mounting, trading, opening block GUIs, etc.).",
-	"text.autoconfig.tenthslot.option.vanillaLeftClick": "Vanilla Left Click",
-	"text.autoconfig.tenthslot.option.vanillaLeftClick.@Tooltip": "When disabled, left-click interactions are blocked while the tenth slot is selected (attacking entities, breaking blocks)."
+	"config.tenthslot.title": "Tenth Slot",
+	"config.tenthslot.category.general": "General",
+	"config.tenthslot.showOnlyWhenHotbarFull": "Show Only When Hotbar Is Full",
+	"config.tenthslot.showOnlyWhenHotbarFull.desc": "When enabled, the tenth slot is only shown when all 9 hotbar slots are occupied.",
+	"config.tenthslot.vanillaOffhandActions": "Vanilla Offhand Actions",
+	"config.tenthslot.vanillaOffhandActions.desc": "When disabled, offhand item actions are blocked while the tenth slot is selected (using items, placing blocks, eating, drinking, etc.).",
+	"config.tenthslot.vanillaNonItemRightClick": "Vanilla Non-Item Right Click",
+	"config.tenthslot.vanillaNonItemRightClick.desc": "When disabled, non-item right-click interactions are blocked while the tenth slot is selected (opening doors, mounting, trading, opening block GUIs, etc.).",
+	"config.tenthslot.vanillaLeftClick": "Vanilla Left Click",
+	"config.tenthslot.vanillaLeftClick.desc": "When disabled, left-click interactions are blocked while the tenth slot is selected (attacking entities, breaking blocks)."
 }

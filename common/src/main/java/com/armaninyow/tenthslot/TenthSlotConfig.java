@@ -1,46 +1,60 @@
 package com.armaninyow.tenthslot;
 
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigData;
-import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+// 26.1.x: Replaced cloth-config/AutoConfig with YACL 3.x.
+// Config values are plain public fields; YACL reads/writes them via Binding.
+// Persistence is handled manually in load()/save() using a simple JSON file
+// in the default config directory, since YACL itself is purely a GUI library.
+public class TenthSlotConfig {
 
-@Config(name = TenthSlot.MOD_ID)
-public class TenthSlotConfig implements ConfigData {
-
-	// When true, the tenth slot is only shown when all 9 hotbar slots are occupied.
-	// Default is false — the tenth slot is always visible.
-	@ConfigEntry.Gui.Tooltip
 	public boolean showOnlyWhenHotbarFull = false;
-
-	// When true, offhand actions (placing blocks, eating, using items, etc.)
-	// work normally while the tenth slot is selected.
-	// When false, only non-item interactions work (opening doors, mounting, trading).
-	// Default is true — matches vanilla offhand behavior as per spec.
-	@ConfigEntry.Gui.Tooltip
 	public boolean vanillaOffhandActions = true;
-
-	// When true, non-item right-click interactions (opening doors, mounting animals,
-	// trading with villagers, opening block GUIs, etc.) work normally while the
-	// tenth slot is selected.
-	// When false, these interactions are blocked.
-	// Default is true.
-	@ConfigEntry.Gui.Tooltip
 	public boolean vanillaNonItemRightClick = true;
-
-	// When true, left-click interactions (attacking entities, breaking blocks)
-	// work normally while the tenth slot is selected.
-	// When false, these interactions are blocked.
-	// Default is true.
-	@ConfigEntry.Gui.Tooltip
 	public boolean vanillaLeftClick = true;
 
+	// --- Singleton ---
+
+	private static TenthSlotConfig INSTANCE = null;
+
 	public static TenthSlotConfig get() {
-		return AutoConfig.getConfigHolder(TenthSlotConfig.class).getConfig();
+		if (INSTANCE == null) {
+			INSTANCE = new TenthSlotConfig();
+			INSTANCE.load();
+		}
+		return INSTANCE;
 	}
 
-	public static void register() {
-		AutoConfig.register(TenthSlotConfig.class, GsonConfigSerializer::new);
+	// --- Persistence (simple JSON via Gson, already on the classpath via MC) ---
+
+	private static java.io.File configFile() {
+		// fabric loader exposes the config dir via FabricLoader.getInstance().getConfigDir()
+		return net.fabricmc.loader.api.FabricLoader.getInstance()
+			.getConfigDir()
+			.resolve(TenthSlot.MOD_ID + ".json")
+			.toFile();
+	}
+
+	public void load() {
+		java.io.File file = configFile();
+		if (!file.exists()) return;
+		try (java.io.FileReader reader = new java.io.FileReader(file)) {
+			TenthSlotConfig loaded = new com.google.gson.Gson().fromJson(reader, TenthSlotConfig.class);
+			if (loaded != null) {
+				this.showOnlyWhenHotbarFull = loaded.showOnlyWhenHotbarFull;
+				this.vanillaOffhandActions  = loaded.vanillaOffhandActions;
+				this.vanillaNonItemRightClick = loaded.vanillaNonItemRightClick;
+				this.vanillaLeftClick       = loaded.vanillaLeftClick;
+			}
+		} catch (Exception e) {
+			TenthSlot.LOGGER.error("Failed to load config", e);
+		}
+	}
+
+	public void save() {
+		java.io.File file = configFile();
+		try (java.io.FileWriter writer = new java.io.FileWriter(file)) {
+			new com.google.gson.GsonBuilder().setPrettyPrinting().create().toJson(this, writer);
+		} catch (Exception e) {
+			TenthSlot.LOGGER.error("Failed to save config", e);
+		}
 	}
 }
