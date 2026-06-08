@@ -43,9 +43,9 @@ public class ScrollMixin {
 		}
 
 		if (direction > 0.0) {
-			current = (current + 1) % totalSlots;
-		} else {
 			current = (current - 1 + totalSlots) % totalSlots;
+		} else {
+			current = (current + 1) % totalSlots;
 		}
 
 		inventory.selected = current;
