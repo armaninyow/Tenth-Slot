@@ -19,6 +19,9 @@ If you encounter bugs or wish to contribute:
 <details>
   <summary></summary>
   
+### 2.0.1—26.x
+* Fixed tenth slot appearing in spectator mode
+* Fixed health, hunger, XP bar, and other survival HUD elements being hidden when the tenth slot was selected
 ### 2.0.0—26.x
 * Added support for Minecraft 26.1, 26.1.1, and 26.1.2
 * Replaced Cloth Config with YetAnotherConfigLib (YACL) 3.9.3 for the in-game config screen
