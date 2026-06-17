@@ -10,22 +10,12 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.level.GameType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * 26.1.x version of InGameHudMixin.
- *
- * API changes from 1.21.6:
- *  - GuiGraphics -> GuiGraphicsExtractor
- *  - renderItemHotbar() is now private extractItemHotbar(), called from
- *    extractHotbarAndDecorations() — we inject into that instead.
- *  - guiGraphics.renderItem() -> guiGraphics.item()
- *  - guiGraphics.renderItemDecorations() -> guiGraphics.itemDecorations()
- *  - pose().pushPose()/popPose() -> pose().pushMatrix()/popMatrix() (already 26.x style)
- */
 @Environment(EnvType.CLIENT)
 @Mixin(Gui.class)
 public class InGameHudMixin {
@@ -43,16 +33,15 @@ public class InGameHudMixin {
 	private static final int BARRIER_SIZE = 16;
 
 	/**
-	 * Injects into extractHotbarAndDecorations (the injectable parent of the
-	 * now-private extractItemHotbar). When slot 10 is selected we cancel the
-	 * whole method and redraw everything ourselves, exactly as before.
+	 * Intercepts only the hotbar-drawing sub-call, not the entire method.
+	 * This way health, hunger, XP bar, etc. still render normally.
 	 */
 	@Inject(
 		at = @At("HEAD"),
-		method = "extractHotbarAndDecorations(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/DeltaTracker;)V",
+		method = "extractItemHotbar(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/DeltaTracker;)V",
 		cancellable = true
 	)
-	private void onExtractHotbarAndDecorations(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+	private void onExtractItemHotbar(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
 		Minecraft client = Minecraft.getInstance();
 		if (client.player == null) return;
 
@@ -101,9 +90,9 @@ public class InGameHudMixin {
 	}
 
 	/**
-	 * TAIL inject draws the tenth slot widget when vanilla ran normally
-	 * (slot 10 not active). We target extractHotbarAndDecorations here too
-	 * since that is what vanilla calls.
+	 * Draws the tenth slot widget after vanilla finishes rendering its hotbar decorations.
+	 * Skipped in spectator mode (spectator has no hotbar, so the widget is irrelevant)
+	 * and when slot 9 is selected (the HEAD inject above already drew it in that case).
 	 */
 	@Inject(
 		at = @At("TAIL"),
@@ -112,7 +101,13 @@ public class InGameHudMixin {
 	private void onExtractHotbarAndDecorationsTail(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
 		Minecraft client = Minecraft.getInstance();
 		if (client.player == null) return;
+
+		// Don't show the tenth slot widget in spectator mode.
+		if (client.gameMode.getPlayerMode() == GameType.SPECTATOR) return;
+
+		// If slot 9 is selected, the HEAD inject already drew the widget — skip.
 		if (((InventoryAccessor) client.player.getInventory()).tenthslot$getSelected() == TenthSlot.TENTH_SLOT_INDEX) return;
+
 		net.minecraft.world.entity.player.Player player =
 			client.getCameraEntity() instanceof net.minecraft.world.entity.player.Player p ? p : null;
 		if (player == null) return;
@@ -190,7 +185,6 @@ public class InGameHudMixin {
 			guiGraphics.pose().scale(1.0F / scale, (scale + 1.0F) / 2.0F);
 			guiGraphics.pose().translate(-(x + 8), -(y + 12));
 		}
-		// 26.1.x: renderItem -> item,  renderItemDecorations -> itemDecorations
 		guiGraphics.item(player, stack, x, y, seed);
 		if (pop > 0.0F) guiGraphics.pose().popMatrix();
 		guiGraphics.itemDecorations(Minecraft.getInstance().font, stack, x, y);
