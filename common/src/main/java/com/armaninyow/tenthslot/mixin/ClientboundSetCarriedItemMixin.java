@@ -12,24 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * Intercepts ClientboundSetHeldSlotPacket on the client.
- *
- * When the game pauses and resumes (or on certain server state resets), the
- * server sends this packet to sync the hotbar slot. Since the server reverts
- * to slot 0 during pause/resume (it never accepted slot 9 as persistent state
- * outside our patch), the client receives slot 0 and overwrites selected=9,
- * causing a desync where the server thinks slot 0 is active but the client
- * visually shows slot 9.
- *
- * Fix: if the client currently has slot 9 selected when this packet arrives,
- * ignore the packet's slot value and immediately re-send slot 9 to the server
- * to keep both sides in sync.
- *
- * 1.21.4: ClientboundSetHeldSlotPacket is a Record, so accessor is slot()
- * not getSlot().
- */
-// 1.21.11
 @Environment(EnvType.CLIENT)
 @Mixin(ClientPacketListener.class)
 public class ClientboundSetCarriedItemMixin {

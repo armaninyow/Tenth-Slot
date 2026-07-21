@@ -10,17 +10,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * Blocks setItemInHand writes when slot 10 is selected.
- *  - MAIN_HAND: always blocked (would corrupt items[9])
- *  - OFF_HAND: only block EMPTY writes (F key swap clears the offhand).
- *    Non-empty writes (e.g. returning a bucket/bowl/bottle after drinking)
- *    must be allowed so the container item is not lost.
- *
- * Valid for 1.21.5+. Targets LivingEntity where setItemInHand is defined,
- * guarded with instanceof Player so only players are affected.
- */
-// 1.21.11
 @Mixin(LivingEntity.class)
 public class PlayerItemSlotMixin {
 

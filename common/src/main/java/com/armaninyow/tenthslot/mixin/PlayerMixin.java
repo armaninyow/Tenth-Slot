@@ -9,11 +9,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * 1.21.6 version of PlayerMixin.
- * addAdditionalSaveData now takes ValueOutput instead of CompoundTag.
- */
-// 1.21.11
 @Mixin(Player.class)
 public class PlayerMixin {
 

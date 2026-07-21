@@ -13,11 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.lang.reflect.Field;
 import java.util.List;
 
-/**
- * Injects into KeyBindsScreen.addContents() at TAIL — which fires after
- * KeyBindsList is fully built and sorted — to move the Tenth Slot entry
- * after Hotbar Slot 9.
- */
 @Environment(EnvType.CLIENT)
 @Mixin(KeyBindsScreen.class)
 public abstract class KeyBindsListMixin {

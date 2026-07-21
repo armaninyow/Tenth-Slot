@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
 
-// 26.1.x
 @Environment(EnvType.CLIENT)
 public class TenthSlotClient implements ClientModInitializer {
 

@@ -23,14 +23,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * 26.1.x changes from 1.21.4:
- *  - interact(Player, Entity, InteractionHand) removed.
- *  - interactAt(Player, Entity, EntityHitResult, InteractionHand) removed.
- *  - Both replaced by interact(Player, Entity, EntityHitResult, InteractionHand).
- *  - useItemOn now takes LocalPlayer instead of Player (no change needed here,
- *    we still inject with the same descriptor since LocalPlayer extends Player).
- */
 @Environment(EnvType.CLIENT)
 @Mixin(MultiPlayerGameMode.class)
 public class GameModeMixin {
@@ -56,8 +48,6 @@ public class GameModeMixin {
 		return !TenthSlotConfig.get().vanillaLeftClick
 			&& isTenthSlotSelected(player);
 	}
-
-	// --- vanillaOffhandActions / vanillaNonItemRightClick ---
 
 	@Inject(
 		at = @At("HEAD"),
@@ -86,11 +76,6 @@ public class GameModeMixin {
 		}
 	}
 
-	/**
-	 * In 26.1.x, interact(Player, Entity, InteractionHand) and
-	 * interactAt(Player, Entity, EntityHitResult, InteractionHand) were merged
-	 * into interact(Player, Entity, EntityHitResult, InteractionHand).
-	 */
 	@Inject(
 		at = @At("HEAD"),
 		method = "interact(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/EntityHitResult;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;",
@@ -106,8 +91,6 @@ public class GameModeMixin {
 			cir.setReturnValue(InteractionResult.PASS);
 		}
 	}
-
-	// --- vanillaLeftClick ---
 
 	@Inject(
 		at = @At("HEAD"),
@@ -130,8 +113,6 @@ public class GameModeMixin {
 			cir.setReturnValue(false);
 		}
 	}
-
-	// --- handlePickItem (always blocked when slot 10 is selected) ---
 
 	@Inject(
 		at = @At("HEAD"),

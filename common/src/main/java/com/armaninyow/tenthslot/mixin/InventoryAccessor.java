@@ -6,9 +6,6 @@ import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-/**
- * Exposes private fields of {@link Inventory} that became private in 1.21.4.
- */
 @Mixin(Inventory.class)
 public interface InventoryAccessor {
 
