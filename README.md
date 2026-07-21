@@ -19,6 +19,8 @@ If you encounter bugs or wish to contribute:
 <details>
   <summary></summary>
   
+### 2.1.0—26.x
+* Added support for Minecraft 26.2
 ### 2.0.1—26.x
 * Fixed tenth slot appearing in spectator mode
 * Fixed health, hunger, XP bar, and other survival HUD elements being hidden when the tenth slot was selected
